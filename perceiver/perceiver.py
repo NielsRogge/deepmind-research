@@ -135,6 +135,10 @@ class Attention(hk.Module):
     self._output_channels = output_channels
 
   def __call__(self, inputs_q, inputs_kv, attention_mask=None):
+    
+    print("Shape of queries:", inputs_q.shape)
+    print("Shape of keys + values:", inputs_kv.shape)
+    
     # Q and K must have the same number of channels.
     # Default to preserving Q's input's shape.
     if self._qk_channels is None:
