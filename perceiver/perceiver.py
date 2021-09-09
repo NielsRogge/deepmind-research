@@ -89,6 +89,9 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
     wipe_attn = jnp.all(
         attention_mask == 0, axis=2, keepdims=True)  # shape (B, T, 1)
     summed = jnp.where(wipe_attn, jnp.zeros_like(summed), summed)
+  
+  print("Result after wipe attn:", summed[0,:3,:3])
+  
   return summed
 
 
@@ -190,10 +193,15 @@ class Attention(hk.Module):
 
     result = attend(q, k, v, dropout_prob=self._dropout_prob,
                     attention_mask=attention_mask)
-    return conv_1d(
+    
+    w = conv_1d(
         self._output_channels,
         with_bias=self._with_final_bias,
         init_scale=self._final_init_scale)(result)
+    
+    print("Result after conv1d:", w[0,:3,:3])
+    
+    return w
 
 
 class MLP(hk.Module):
