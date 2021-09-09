@@ -67,6 +67,8 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
     attention = jnp.where(attention_mask[:, None, :, :], attention,
                           -large_k)
 
+  print("Attention scores after applying mask:", attention[0,:3,:3:3])
+  
   normalized = jax.nn.softmax(attention)
   if dropout_prob > 0:
     normalized = hk.dropout(hk.next_rng_key(), dropout_prob, normalized)
