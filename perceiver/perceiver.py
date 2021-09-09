@@ -515,8 +515,9 @@ class PerceiverEncoder(hk.Module):
     z = self.cross_attend(z, inputs, is_training=is_training,
                           attention_mask=attention_mask)
     for _ in range(self._num_blocks):
-      for self_attend in self.self_attends:
+      for idx, self_attend in enumerate(self.self_attends):
         z = self_attend(z, is_training=is_training)
+        print(f"Hidden states after layer {i}", z[0,:3,:3])
     return z
 
 
