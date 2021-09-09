@@ -359,11 +359,15 @@ class CrossAttention(hk.Module):
 
     print("Result after query residual:", x[0,:3,:3])
     
+    y = layer_norm(x)
+
+    print("Result after layernorm before MLP:", y[0,:3,:3])
+    
     x += MLP(
         widening_factor=self._widening_factor,
         dropout_prob=dropout_prob,
         init_scale=self._dense_init_scale)(
-            layer_norm(x), is_training=is_training)
+            y, is_training=is_training)
     return x
 
 
