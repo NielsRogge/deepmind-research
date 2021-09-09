@@ -55,6 +55,9 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
   scale = 1. / math.sqrt(q_head_dim)
   attention *= scale
 
+  print("Shape of attention scores:", attention.shape)
+  print("First few elements of attention scores after scaling:", attention[0, :3, :3, :3])
+
   if attention_mask is not None:
     # Use large_k instead of np.NINF because np.NINF breaks for causal-masked
     # left-padded sampling.
