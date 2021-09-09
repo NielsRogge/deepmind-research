@@ -349,6 +349,8 @@ class CrossAttention(hk.Module):
     else:
       x = attention
 
+    print("Result after query residual:", x[0,:3,:3])
+    
     x += MLP(
         widening_factor=self._widening_factor,
         dropout_prob=dropout_prob,
