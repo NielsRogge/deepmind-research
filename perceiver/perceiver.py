@@ -71,10 +71,15 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
   print("Sum of attention scores after applying mask:", attention.sum())
   
   normalized = jax.nn.softmax(attention)
+
+  print("Attention probs after softmax:", normalized[0,:3,:3,:3])
+
   if dropout_prob > 0:
     normalized = hk.dropout(hk.next_rng_key(), dropout_prob, normalized)
   summed = jnp.einsum('bhtT,bThd->bthd', normalized, v)
   summed = jnp.reshape(summed, [batch, q_indices, hiddens])
+
+  print("Result:", summed[0,:3,:3])
 
   if attention_mask is not None:
     # If all attended tokens are masked, or for masked tokens
