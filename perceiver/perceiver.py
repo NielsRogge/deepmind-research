@@ -318,6 +318,7 @@ class CrossAttention(hk.Module):
     attention = hk.dropout(hk.next_rng_key(), dropout_prob, attention)
 
     print("Shape of attention outputs:", attention.shape)
+    print("First few elements of attention outputs:", attention[0,:3,:3])
     
     # Optionally include a residual to the query.
     # Consider omitting the residual if the semantics of query and output
