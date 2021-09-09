@@ -306,19 +306,21 @@ class CrossAttention(hk.Module):
     if self._v_channels is not None:
       v_channels = self._v_channels
 
+    q = layer_norm(inputs_q)
+    kv = layer_norm(inputs_kv)
+    print("First few elements of queries after layernorm:", q[0,:3,:3])
+    print("First few elemnets of keys + values after layernorm:", kv[0,:3,:3])
+    
     attention = Attention(
         num_heads=self._num_heads,
         init_scale=self._att_init_scale,
         dropout_prob=dropout_attn_prob,
         qk_channels=qk_channels,
         v_channels=v_channels,
-        output_channels=output_channels)(layer_norm(inputs_q),
-                                         layer_norm(inputs_kv),
+        output_channels=output_channels)(q,
+                                         kv,
                                          attention_mask=attention_mask)
     attention = hk.dropout(hk.next_rng_key(), dropout_prob, attention)
-
-    print("Shape of attention outputs:", attention.shape)
-    print("First few elements of attention outputs:", attention[0,:3,:3])
     
     # Optionally include a residual to the query.
     # Consider omitting the residual if the semantics of query and output
