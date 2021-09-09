@@ -52,6 +52,9 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
   scale = 1. / math.sqrt(q_head_dim)
   attention *= scale
 
+  print("Shape of attention scores:", attention.shape)
+  print("First few elements of attention scores:", attention[0, :3, :3])
+
   if attention_mask is not None:
     # Use large_k instead of np.NINF because np.NINF breaks for causal-masked
     # left-padded sampling.
@@ -163,6 +166,10 @@ class Attention(hk.Module):
     k = conv_1d(self._qk_channels, init_scale=self._init_scale)(inputs_kv)
     v = conv_1d(self._v_channels, init_scale=self._init_scale)(inputs_kv)
 
+    print("First few elements of queries:", q[0, :3, :3])
+    print("First few elements of keys:", k[0, :3, :3])
+    print("First few elements of values:", v[0, :3, :3])
+    
     # Reshape channels for multi-head attention.
     batch, q_time, _ = q.shape
     _, kv_time, _ = k.shape
@@ -308,8 +315,9 @@ class CrossAttention(hk.Module):
 
     q = layer_norm(inputs_q)
     kv = layer_norm(inputs_kv)
-    print("First few elements of queries after layernorm:", q[0,:3,:3])
-    print("First few elemnets of keys + values after layernorm:", kv[0,:3,:3])
+    # OK
+    # print("First few elements of queries after layernorm:", q[0,:3,:3])
+    # print("First few elemnets of keys + values after layernorm:", kv[0,:3,:3])
     
     attention = Attention(
         num_heads=self._num_heads,
