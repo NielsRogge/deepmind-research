@@ -136,9 +136,6 @@ class Attention(hk.Module):
 
   def __call__(self, inputs_q, inputs_kv, attention_mask=None):
     
-    print("Shape of queries:", inputs_q.shape)
-    print("Shape of keys + values:", inputs_kv.shape)
-    
     # Q and K must have the same number of channels.
     # Default to preserving Q's input's shape.
     if self._qk_channels is None:
@@ -320,6 +317,8 @@ class CrossAttention(hk.Module):
                                          attention_mask=attention_mask)
     attention = hk.dropout(hk.next_rng_key(), dropout_prob, attention)
 
+    print("Shape of attention outputs:", attention.shape)
+    
     # Optionally include a residual to the query.
     # Consider omitting the residual if the semantics of query and output
     # are different, e.g. if queries are positions and outputs are pixels.
@@ -468,6 +467,12 @@ class PerceiverEncoder(hk.Module):
       attention_mask = make_cross_attention_mask(
           query_mask=jnp.ones(z.shape[:2], dtype=jnp.int32),
           kv_mask=input_mask)
+    
+    print("Shape of latents before cross-attention:", z.shape)
+    print("First few elements of latents:", z[0,:3,:3])
+    print("Shape of inputs before cross-attention:", inputs.shape)
+    print("First few elements of inputs:", inputs[0,:3,:3])
+    
     z = self.cross_attend(z, inputs, is_training=is_training,
                           attention_mask=attention_mask)
     for _ in range(self._num_blocks):
