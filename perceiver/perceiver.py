@@ -68,6 +68,7 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
                           -large_k)
 
   print("Attention scores after applying mask:", attention[0,:3,:3,:3])
+  print("Sum of attention scores after applying mask:", attention.sum())
   
   normalized = jax.nn.softmax(attention)
   if dropout_prob > 0:
