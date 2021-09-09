@@ -49,11 +49,11 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
 
   attention = jnp.einsum('bthd,bThd->bhtT', q, k)
 
-  scale = 1. / math.sqrt(q_head_dim)
-  attention *= scale
-
   print("Shape of attention scores:", attention.shape)
   print("First few elements of attention scores:", attention[0, :3, :3, :3])
+  
+  scale = 1. / math.sqrt(q_head_dim)
+  attention *= scale
 
   if attention_mask is not None:
     # Use large_k instead of np.NINF because np.NINF breaks for causal-masked
