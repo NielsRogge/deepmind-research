@@ -53,7 +53,7 @@ def attend(q, k, v, dropout_prob=0.0, attention_mask=None):
   attention *= scale
 
   print("Shape of attention scores:", attention.shape)
-  print("First few elements of attention scores:", attention[0, :3, :3])
+  print("First few elements of attention scores:", attention[0, :3, :3, :3])
 
   if attention_mask is not None:
     # Use large_k instead of np.NINF because np.NINF breaks for causal-masked
