@@ -368,6 +368,9 @@ class CrossAttention(hk.Module):
         dropout_prob=dropout_prob,
         init_scale=self._dense_init_scale)(
             y, is_training=is_training)
+    
+    print("Result after MLP:", x[0,:3,:3])
+    
     return x
 
 
