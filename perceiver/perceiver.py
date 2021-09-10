@@ -420,6 +420,9 @@ class Perceiver(hk.Module):
     # Run the network forward:
     z = self._encoder(inputs, encoder_query,
                       is_training=is_training, input_mask=input_mask)
+
+    print("Encoder outputs:", z[0,:3,:3])
+
     _, output_modality_sizes = self._decoder.output_shape(
         inputs)
     output_modality_sizes = output_modality_sizes or modality_sizes
@@ -427,6 +430,8 @@ class Perceiver(hk.Module):
     outputs = self._decoder(
         decoder_query, z, is_training=is_training, query_mask=query_mask)
 
+    print("Decoder outputs:", outputs[0,:3,:3])
+    
     if self._output_postprocessor:
       outputs = self._output_postprocessor(outputs, is_training=is_training,
                                            modality_sizes=output_modality_sizes)
