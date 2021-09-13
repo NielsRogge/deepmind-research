@@ -355,6 +355,11 @@ class ImagePreprocessor(hk.Module):
       self, inputs: jnp.ndarray, pos: jnp.ndarray,
       network_input_is_1d: bool = True) -> Tuple[jnp.ndarray, jnp.ndarray]:
     """Construct the final input, including position encoding."""
+    
+    print("Shape of inputs inside _build_network_inputs method:", inputs.shape)
+    print("Pos:", pos)
+    print("Network_input_is_1d:", network_input_is_1d)
+    
     batch_size = inputs.shape[0]
     index_dims = inputs.shape[1:-1]
 
