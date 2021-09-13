@@ -430,7 +430,7 @@ class Perceiver(hk.Module):
     outputs = self._decoder(
         decoder_query, z, is_training=is_training, query_mask=query_mask)
 
-    prit("Shape of decoder outputs:", outputs.shape)
+    print("Shape of decoder outputs:", outputs.shape)
     if len(outputs.shape) == 3:
       print("Decoder outputs:", outputs[0,:3,:3])
     else:
