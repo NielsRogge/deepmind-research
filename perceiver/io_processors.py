@@ -383,6 +383,9 @@ class ImagePreprocessor(hk.Module):
     elif self._concat_or_add_pos == 'add':
       inputs_with_pos = inputs + pos_enc
 
+    print("Shape of inputs_with_pos:", inputs_with_pos.shape)
+    print("Shape of inputs:", inputs.shape)
+    
     return inputs_with_pos, inputs
 
   def __call__(
@@ -390,6 +393,9 @@ class ImagePreprocessor(hk.Module):
       is_training: bool,
       pos: Optional[jnp.ndarray] = None,
       network_input_is_1d: bool = True) -> PreprocessorOutputT:
+    
+    print("Shape of inputs to preprocessor:", inputs.shape)
+    
     if self._prep_type == 'conv':
       # Convnet image featurization.
       # Downsamples spatially by a factor of 4
