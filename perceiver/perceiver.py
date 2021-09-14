@@ -201,7 +201,7 @@ class Attention(hk.Module):
         with_bias=self._with_final_bias,
         init_scale=self._final_init_scale)(result)
     
-    print("Shape of result after conv1d:", result.shape)
+    print("Shape of result after conv1d:", w.shape)
     
     print("Result after conv1d:", w[0,:3,:3])
     
