@@ -194,10 +194,14 @@ class Attention(hk.Module):
     result = attend(q, k, v, dropout_prob=self._dropout_prob,
                     attention_mask=attention_mask)
     
+    print("Shape of result before conv1d:", result.shape)
+    
     w = conv_1d(
         self._output_channels,
         with_bias=self._with_final_bias,
         init_scale=self._final_init_scale)(result)
+    
+    print("Shape of result after conv1d:", result.shape)
     
     print("Result after conv1d:", w[0,:3,:3])
     
