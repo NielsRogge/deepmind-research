@@ -718,6 +718,11 @@ class ClassificationDecoder(AbstractPerceiverDecoder):
     return (inputs.shape[0], self._num_classes), None
 
   def __call__(self, query, z, *, is_training, query_mask=None):
+    
+    print("Shape of latents in classification decoder:", z.shape)
+    print("Shape of queries in classification decoder:", query.shape)
+    print("Query mask in classification decoder:", query_mask)
+
     # B x 1 x num_classes -> B x num_classes
     logits = self.decoder(query, z, is_training=is_training)
     return logits[:, 0, :]
