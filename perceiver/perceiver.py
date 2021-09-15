@@ -308,15 +308,20 @@ class CrossAttention(hk.Module):
       qk_channels = self._qk_channels
     if self._v_channels is not None:
       v_channels = self._v_channels
-
+    
+    q = layer_norm(inputs_q)
+    kv = layer_norm(inputs_kv)
+    print("First few elements of queries after layernorm:", q[0,:3,:3])
+    print("First few elemnets of keys + values after layernorm:", kv[0,:3,:3])
+    
     attention = Attention(
         num_heads=self._num_heads,
         init_scale=self._att_init_scale,
         dropout_prob=dropout_attn_prob,
         qk_channels=qk_channels,
         v_channels=v_channels,
-        output_channels=output_channels)(layer_norm(inputs_q),
-                                         layer_norm(inputs_kv),
+        output_channels=output_channels)(q,
+                                         kv,
                                          attention_mask=attention_mask)
     attention = hk.dropout(hk.next_rng_key(), dropout_prob, attention)
 
@@ -468,6 +473,9 @@ class PerceiverEncoder(hk.Module):
       attention_mask = make_cross_attention_mask(
           query_mask=jnp.ones(z.shape[:2], dtype=jnp.int32),
           kv_mask=input_mask)
+    
+    
+    
     z = self.cross_attend(z, inputs, is_training=is_training,
                           attention_mask=attention_mask)
     for _ in range(self._num_blocks):
