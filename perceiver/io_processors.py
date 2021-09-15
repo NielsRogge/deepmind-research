@@ -417,7 +417,11 @@ class ImagePreprocessor(hk.Module):
       if len(inputs.shape) == 5:
         conv = hk.BatchApply(conv)
 
+      print("Shape of inputs before conv:", inputs.shape)
+      print("Inputs before conv:", np.moveaxis(inputs, -1, 1)[0,0,:3,:3])
       inputs = conv(inputs)
+      print("Shape of inputs after conv:", inputs.shape)
+      print("Inputs after conv:", np.moveaxis(inputs, -1, 1)[0,0,:3,:3])
     elif self._prep_type == 'patches':
       # Space2depth featurization.
       # Video: B x T x H x W x C
