@@ -213,10 +213,18 @@ def build_position_encoding(
   else:
     raise ValueError(f'Unknown position encoding: {position_encoding_type}.')
 
+  print("Shape of position encodings before projection:", output_pos_enc.shape)
+  print("First elements of position encodings before projection:", output_pos_enc[0,:3,:3])
+  print("Sum of position encodings before projection:", output_pos_enc.sum())
+  
   if project_pos_dim > 0:
     # Project the position encoding to a target dimension:
     output_pos_enc = PositionEncodingProjector(
         output_size=project_pos_dim,
         base_position_encoding=output_pos_enc)
+
+  print("Shape of position encodings after projection:", output_pos_enc.shape)
+  print("First elements of position encodings after projection:", output_pos_enc[0,:3,:3])
+  print("Sum of position encodings after projection:", output_pos_enc.sum())
 
   return output_pos_enc
