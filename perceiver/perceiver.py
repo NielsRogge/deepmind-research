@@ -309,8 +309,10 @@ class CrossAttention(hk.Module):
     if self._v_channels is not None:
       v_channels = self._v_channels
     
-    print("First few elements of queries:", inputs_q[0,:3,:3])
-    print("First few elemnets of keys + values:", inputs_kv[0,:3,:3])
+    print("First few elements of queries before layernorm:", inputs_q[0,:3,:3])
+    print("Sum of queries before layernorm:", inputs_q.sum())
+    print("First few elemnets of keys + values before layernorm:", inputs_kv[0,:3,:3])
+    print("Sum of keys + values before layernorm:", inputs_kv.sum())
     q = layer_norm(inputs_q)
     kv = layer_norm(inputs_kv)
     print("First few elements of queries after layernorm:", q[0,:3,:3])
