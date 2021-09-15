@@ -418,6 +418,7 @@ class ImagePreprocessor(hk.Module):
       inputs = conv(inputs)
 
       print("Inputs after conv:", np.moveaxis(inputs, -1, 1)[0,:3,:3,:3])
+      print("Sum of inputs after conv:", inputs.sum())
 
     elif self._prep_type == 'patches':
       # Space2depth featurization.
