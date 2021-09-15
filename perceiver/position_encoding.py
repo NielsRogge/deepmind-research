@@ -184,7 +184,17 @@ class PositionEncodingProjector(AbstractPositionEncoding):
 
   def __call__(self, batch_size, pos=None):
     base_pos = self._base_position_encoding(batch_size, pos)
+
+    print("Shape of position encodings after projection:", base_pos.shape)
+    print("First elements of position encodings after projection:", base_pos[0,:3,:3])
+    print("Sum of position encodings after projection:", base_pos.sum())
+
     projected_pos = hk.Linear(output_size=self._output_size)(base_pos)
+    
+    print("Shape of position encodings after projection:", projected_pos.shape)
+    print("First elements of position encodings after projection:", projected_pos[0,:3,:3])
+    print("Sum of position encodings after projection:", projected_pos.sum())
+    
     return projected_pos
 
 
@@ -212,19 +222,11 @@ def build_position_encoding(
         **fourier_position_encoding_kwargs)
   else:
     raise ValueError(f'Unknown position encoding: {position_encoding_type}.')
-
-  print("Shape of position encodings before projection:", output_pos_enc.shape)
-  print("First elements of position encodings before projection:", output_pos_enc[0,:3,:3])
-  print("Sum of position encodings before projection:", output_pos_enc.sum())
   
   if project_pos_dim > 0:
     # Project the position encoding to a target dimension:
     output_pos_enc = PositionEncodingProjector(
         output_size=project_pos_dim,
         base_position_encoding=output_pos_enc)
-
-  print("Shape of position encodings after projection:", output_pos_enc.shape)
-  print("First elements of position encodings after projection:", output_pos_enc[0,:3,:3])
-  print("Sum of position encodings after projection:", output_pos_enc.sum())
 
   return output_pos_enc
