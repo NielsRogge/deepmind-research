@@ -372,6 +372,8 @@ class ImagePreprocessor(hk.Module):
     pos_enc = self._positional_encoding_ctor(
         index_dims=index_dims)(batch_size=batch_size, pos=pos)
 
+    print("Shape of position encodings:", pos_enc.shape)
+
     for i in range(0, self._n_extra_pos_mlp):
       pos_enc += hk.Linear(pos_enc.shape[-1])(pos_enc)
       if i < (self._n_extra_pos_mlp-1):
@@ -382,11 +384,14 @@ class ImagePreprocessor(hk.Module):
       # if the network takes non-1D inputs
       sh = inputs.shape
       pos_enc = jnp.reshape(pos_enc, list(sh)[:-1]+[-1])
-
+    
     if self._concat_or_add_pos == 'concat':
       inputs_with_pos = jnp.concatenate([inputs, pos_enc], axis=-1)
     elif self._concat_or_add_pos == 'add':
       inputs_with_pos = inputs + pos_enc
+    
+    print("Inputs without position encodings:", inputs[0,:3,:3])
+    print("Inputs with position encodings:", inputs_with_pos[0,:3,:3])
     
     return inputs_with_pos, inputs
 
@@ -447,6 +452,7 @@ class ImagePreprocessor(hk.Module):
     inputs, inputs_without_pos = self._build_network_inputs(
         inputs, pos, network_input_is_1d)
     modality_sizes = None  # Size for each modality, only needed for multimodal
+  
     return inputs, modality_sizes, inputs_without_pos
 
 
@@ -584,8 +590,6 @@ class AudioPreprocessor(hk.Module):
     # Construct the position encoding.
     pos_enc = self._positional_encoding_ctor(
         index_dims=index_dims)(batch_size=batch_size, pos=pos)
-
-    print("Shape of position encodings:", pos_enc.shape)
     
     for i in range(0, self._n_extra_pos_mlp):
       pos_enc += hk.Linear(pos_enc.shape[-1])(pos_enc)
@@ -596,8 +600,6 @@ class AudioPreprocessor(hk.Module):
       inputs_with_pos = jnp.concatenate([inputs, pos_enc], axis=-1)
     elif self._concat_or_add_pos == 'add':
       inputs_with_pos = inputs + pos_enc
-
-    print("Inputs_with_pos:", inputs[0, :3, :3])
     
     return inputs_with_pos, inputs
 
