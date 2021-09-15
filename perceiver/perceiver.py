@@ -162,6 +162,10 @@ class Attention(hk.Module):
     k = conv_1d(self._qk_channels, init_scale=self._init_scale)(inputs_kv)
     v = conv_1d(self._v_channels, init_scale=self._init_scale)(inputs_kv)
 
+    print("First few elements of queries:", q[0, :3, :3])
+    print("First few elements of keys:", k[0, :3, :3])
+    print("First few elements of values:", v[0, :3, :3])
+
     # Reshape channels for multi-head attention.
     batch, q_time, _ = q.shape
     _, kv_time, _ = k.shape
