@@ -390,7 +390,9 @@ class ImagePreprocessor(hk.Module):
       inputs_with_pos = inputs + pos_enc
 
     print("Inputs with position encodings:", inputs_with_pos[0,:3,:3])
+    print("Sum of inputs with position encodings:", inputs_with_pos.sum())
     print("Inputs without position encodings:", inputs[0,:3,:3])
+    print("Sum of inputs without position encodings:", inputs.sum())
     
     return inputs_with_pos, inputs
 
