@@ -363,10 +363,16 @@ class ImagePreprocessor(hk.Module):
       inputs = jnp.reshape(
           inputs, [batch_size, np.prod(index_dims), -1])
 
+    print("Shape of inputs:", inputs.shape)
+    print("First elements of inputs:", inputs[0,:3,:3])
+    
     # Construct the position encoding.
     pos_enc = self._positional_encoding_ctor(
         index_dims=index_dims)(batch_size=batch_size, pos=pos)
 
+    print("Shape of position encodings:", pos_enc.shape)
+    print("First elements of position encodings:", pos_enc[0,:3,:3])
+    
     for i in range(0, self._n_extra_pos_mlp):
       pos_enc += hk.Linear(pos_enc.shape[-1])(pos_enc)
       if i < (self._n_extra_pos_mlp-1):
@@ -383,6 +389,9 @@ class ImagePreprocessor(hk.Module):
     elif self._concat_or_add_pos == 'add':
       inputs_with_pos = inputs + pos_enc
 
+    print("Inputs with position encodings:", inputs_with_pos[0,:3,:3])
+    print("Inputs without position encodings:", inputs[0,:3,:3])
+    
     return inputs_with_pos, inputs
 
   def __call__(
