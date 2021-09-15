@@ -387,9 +387,6 @@ class ImagePreprocessor(hk.Module):
       inputs_with_pos = jnp.concatenate([inputs, pos_enc], axis=-1)
     elif self._concat_or_add_pos == 'add':
       inputs_with_pos = inputs + pos_enc
-
-    print("Shape of inputs_with_pos:", inputs_with_pos.shape)
-    print("Shape of inputs:", inputs.shape)
     
     return inputs_with_pos, inputs
 
@@ -588,6 +585,8 @@ class AudioPreprocessor(hk.Module):
     pos_enc = self._positional_encoding_ctor(
         index_dims=index_dims)(batch_size=batch_size, pos=pos)
 
+    print("Shape of position encodings:", pos_enc.shape)
+    
     for i in range(0, self._n_extra_pos_mlp):
       pos_enc += hk.Linear(pos_enc.shape[-1])(pos_enc)
       if i < (self._n_extra_pos_mlp-1):
@@ -598,6 +597,8 @@ class AudioPreprocessor(hk.Module):
     elif self._concat_or_add_pos == 'add':
       inputs_with_pos = inputs + pos_enc
 
+    print("Inputs_with_pos:", inputs[0, :3, :3])
+    
     return inputs_with_pos, inputs
 
   def __call__(self, inputs: jnp.ndarray, *,
