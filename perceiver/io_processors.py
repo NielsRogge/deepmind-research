@@ -365,6 +365,7 @@ class ImagePreprocessor(hk.Module):
 
     print("Shape of inputs:", inputs.shape)
     print("First elements of inputs:", inputs[0,:3,:3])
+    print("Sum of inputs before adding position encodings:", inputs.sum())
     
     # Construct the position encoding.
     pos_enc = self._positional_encoding_ctor(
