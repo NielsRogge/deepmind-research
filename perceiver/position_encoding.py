@@ -185,9 +185,9 @@ class PositionEncodingProjector(AbstractPositionEncoding):
   def __call__(self, batch_size, pos=None):
     base_pos = self._base_position_encoding(batch_size, pos)
 
-    print("Shape of position encodings after projection:", base_pos.shape)
-    print("First elements of position encodings after projection:", base_pos[0,:3,:3])
-    print("Sum of position encodings after projection:", base_pos.sum())
+    print("Shape of position encodings before projection:", base_pos.shape)
+    print("First elements of position encodings before projection:", base_pos[0,:3,:3])
+    print("Sum of position encodings before projection:", base_pos.sum())
 
     projected_pos = hk.Linear(output_size=self._output_size)(base_pos)
     

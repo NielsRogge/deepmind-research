@@ -443,8 +443,10 @@ class ImagePreprocessor(hk.Module):
     elif self._prep_type == 'pixels':
       # if requested, downsamples in the crudest way
       if inputs.ndim == 4:
+        print("Shape of inputs before downsampling:", inputs.shape)
         inputs = inputs[:,
                         ::self._spatial_downsample, ::self._spatial_downsample]
+        print("Shape of inputs after downsampling:", inputs.shape)
       elif inputs.ndim == 5:
         inputs = inputs[:, ::self._temporal_downsample,
                         ::self._spatial_downsample, ::self._spatial_downsample]
