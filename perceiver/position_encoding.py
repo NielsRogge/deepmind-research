@@ -53,6 +53,9 @@ def generate_fourier_features(
       jnp.linspace(min_freq, res / 2, num=num_bands, endpoint=True)
       for res in max_resolution], axis=0)
 
+  print("Shape of pos:", pos.shape)
+  print("Shape of freq_bands:", freq_bands.shape)
+  
   # Get frequency bands for each spatial dimension.
   # Output is size [n, d * num_bands]
   per_pos_features = pos[:, :, None] * freq_bands[None, :, :]
