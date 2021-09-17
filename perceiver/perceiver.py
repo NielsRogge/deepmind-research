@@ -379,6 +379,8 @@ class Perceiver(hk.Module):
       modality_sizes = None
       inputs_without_pos = None
 
+    print("Shape of inputs before going into the perceiver:", inputs.shape)
+    
     # Get the queries for encoder and decoder cross-attends.
     encoder_query = self._encoder.latents(inputs)
     decoder_query = self._decoder.decoder_query(
