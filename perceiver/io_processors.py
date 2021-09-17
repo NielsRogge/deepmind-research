@@ -194,15 +194,19 @@ class Conv2DDownsample(hk.Module):
                is_training: bool,
                test_local_stats: bool = False) -> jnp.ndarray:
     out = inputs
-    for layer in self.layers:
+    for idx, layer in enumerate(self.layers):
+      print(f"Shape of inputs of conv layer {idx}:", out.shape)
       out = layer['conv'](out)
       if layer['batchnorm'] is not None:
         out = layer['batchnorm'](out, is_training, test_local_stats)
       out = jax.nn.relu(out)
+      print(f"Shape of inputs of max pool layer {idx}:", out.shape)
       out = hk.max_pool(out,
                         window_shape=(1, 3, 3, 1),
                         strides=(1, 2, 2, 1),
                         padding='SAME')
+    
+    print("Shape of final output of conv2d down sampling layer:", out.shape)
     return out
 
 
