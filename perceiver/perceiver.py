@@ -162,9 +162,9 @@ class Attention(hk.Module):
     k = conv_1d(self._qk_channels, init_scale=self._init_scale)(inputs_kv)
     v = conv_1d(self._v_channels, init_scale=self._init_scale)(inputs_kv)
 
-    print("First few elements of queries:", q[0, :3, :3])
-    print("First few elements of keys:", k[0, :3, :3])
-    print("First few elements of values:", v[0, :3, :3])
+    # print("First few elements of queries:", q[0, :3, :3])
+    # print("First few elements of keys:", k[0, :3, :3])
+    # print("First few elements of values:", v[0, :3, :3])
 
     # Reshape channels for multi-head attention.
     batch, q_time, _ = q.shape
@@ -309,14 +309,14 @@ class CrossAttention(hk.Module):
     if self._v_channels is not None:
       v_channels = self._v_channels
     
-    print("First few elements of queries before layernorm:", inputs_q[0,:3,:3])
-    print("Sum of queries before layernorm:", inputs_q.sum())
-    print("First few elemnets of keys + values before layernorm:", inputs_kv[0,:3,:3])
-    print("Sum of keys + values before layernorm:", inputs_kv.sum())
+    # print("First few elements of queries before layernorm:", inputs_q[0,:3,:3])
+    # print("Sum of queries before layernorm:", inputs_q.sum())
+    # print("First few elemnets of keys + values before layernorm:", inputs_kv[0,:3,:3])
+    # print("Sum of keys + values before layernorm:", inputs_kv.sum())
     q = layer_norm(inputs_q)
     kv = layer_norm(inputs_kv)
-    print("First few elements of queries after layernorm:", q[0,:3,:3])
-    print("First few elemnets of keys + values after layernorm:", kv[0,:3,:3])
+    #print("First few elements of queries after layernorm:", q[0,:3,:3])
+    #print("First few elemnets of keys + values after layernorm:", kv[0,:3,:3])
     
     attention = Attention(
         num_heads=self._num_heads,
