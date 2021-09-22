@@ -358,11 +358,16 @@ class ImagePreprocessor(hk.Module):
     batch_size = inputs.shape[0]
     index_dims = inputs.shape[1:-1]
 
+    print("Index dims:", index_dims)
+    print("Shape of inputs before reshaping:", inputs.shape)
+    
     # Reshape input features to a 1D index dimension if necessary.
     if len(inputs.shape) > 3 and network_input_is_1d:
       inputs = jnp.reshape(
           inputs, [batch_size, np.prod(index_dims), -1])
-
+    
+    print("Shape of inputs after reshaping:", inputs.shape)
+    
     # Construct the position encoding.
     pos_enc = self._positional_encoding_ctor(
         index_dims=index_dims)(batch_size=batch_size, pos=pos)
@@ -408,6 +413,9 @@ class ImagePreprocessor(hk.Module):
 
       inputs = conv(inputs)
     elif self._prep_type == 'patches':
+      
+      print("Shape of inputs before preprocessing:", inputs.shape)
+      
       # Space2depth featurization.
       # Video: B x T x H x W x C
       inputs = space_to_depth(
@@ -415,12 +423,19 @@ class ImagePreprocessor(hk.Module):
           temporal_block_size=self._temporal_downsample,
           spatial_block_size=self._spatial_downsample)
 
+      print("Shape of inputs after space2depth:", inputs.shape)
+      
       if inputs.ndim == 5 and inputs.shape[1] == 1:
         # for flow
         inputs = jnp.squeeze(inputs, axis=1)
 
+      print("Shape of inputs after squeezing:", inputs.shape)
+      
       if self._conv_after_patching:
         inputs = hk.Linear(self._num_channels, name='patches_linear')(inputs)
+    
+      print("Shape of inputs after patches preprocessing:", inputs.shape)
+    
     elif self._prep_type == 'pixels':
       # if requested, downsamples in the crudest way
       if inputs.ndim == 4:
