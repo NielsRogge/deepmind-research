@@ -357,6 +357,8 @@ class Perceiver(hk.Module):
 
   def __call__(self, inputs, *, is_training, subsampled_output_points=None,
                pos=None, input_mask=None, query_mask=None):
+    print("Shape of original inputs:", inputs.shape)
+    
     if self._input_preprocessor:
       network_input_is_1d = self._encoder._input_is_1d
       inputs, modality_sizes, inputs_without_pos = self._input_preprocessor(
@@ -366,6 +368,8 @@ class Perceiver(hk.Module):
       modality_sizes = None
       inputs_without_pos = None
 
+    print("Shape of inputs after input preprocessor:", inputs.shape)
+    
     # Get the queries for encoder and decoder cross-attends.
     encoder_query = self._encoder.latents(inputs)
     decoder_query = self._decoder.decoder_query(
