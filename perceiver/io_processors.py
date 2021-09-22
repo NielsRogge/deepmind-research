@@ -408,6 +408,9 @@ class ImagePreprocessor(hk.Module):
 
       inputs = conv(inputs)
     elif self._prep_type == 'patches':
+      
+      print("Shape of inputs before preprocessing:", inputs.shape)
+      
       # Space2depth featurization.
       # Video: B x T x H x W x C
       inputs = space_to_depth(
@@ -415,12 +418,19 @@ class ImagePreprocessor(hk.Module):
           temporal_block_size=self._temporal_downsample,
           spatial_block_size=self._spatial_downsample)
 
+      print("Shape of inputs after space2depth:", inputs.shape)
+      
       if inputs.ndim == 5 and inputs.shape[1] == 1:
         # for flow
         inputs = jnp.squeeze(inputs, axis=1)
 
+      print("Shape of inputs after squeezing:", inputs.shape)
+      
       if self._conv_after_patching:
         inputs = hk.Linear(self._num_channels, name='patches_linear')(inputs)
+    
+      print("Shape of inputs after patches preprocessing:", inputs.shape)
+    
     elif self._prep_type == 'pixels':
       # if requested, downsamples in the crudest way
       if inputs.ndim == 4:
@@ -689,6 +699,11 @@ class MultimodalPreprocessor(hk.Module):
                is_training: bool,
                pos: Optional[jnp.ndarray] = None,
                network_input_is_1d: bool = True) -> PreprocessorOutputT:
+    
+    for k,v in inputs.items():
+      print("Modality:", k)
+      print("Shape of inputs of corresponding modality:", v.shape)
+    
     outputs = {}
     inputs_without_pos = {}
     for modality, preprocessor in self._modalities.items():
@@ -696,6 +711,10 @@ class MultimodalPreprocessor(hk.Module):
           inputs[modality], is_training=is_training, pos=pos,
           network_input_is_1d=network_input_is_1d)
 
+    for k,v in outputs.items():
+      print("Modality:", k)
+      print("Shape of outputs of corresponding modality:", v.shape)
+    
     common_channel_size = (max(o.shape[2] for o in outputs.values())
                            + self._min_padding_size)
 
@@ -726,9 +745,18 @@ class MultimodalPreprocessor(hk.Module):
       padded[modality] = output_padded
       modality_sizes[modality] = output_padded.shape[1]
 
+    for k,v in padded.items():
+      print("Modality:", k)
+      print("Shape of padded outputs of corresponding modality:", v.shape)
+    
     # Apply a predictable ordering to the modalities
     padded_ls = [padded[k] for k in sorted(padded.keys())]
-    return (jnp.concatenate(padded_ls, axis=1),
+    
+    o = jnp.concatenate(padded_ls, axis=1)
+
+    print("Shape of final concatenated output:", o.shape)
+    
+    return (o,
             modality_sizes,
             inputs_without_pos)
 
