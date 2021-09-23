@@ -382,6 +382,9 @@ class Perceiver(hk.Module):
         inputs)
     output_modality_sizes = output_modality_sizes or modality_sizes
 
+    print("Shape of encoder outputs:", z.shape)
+    print("First elements of encoder outputs:", z[0,:3,:3])
+    
     outputs = self._decoder(
         decoder_query, z, is_training=is_training, query_mask=query_mask)
 
