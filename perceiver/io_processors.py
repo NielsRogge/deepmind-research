@@ -433,7 +433,7 @@ class ImagePreprocessor(hk.Module):
         raise ValueError('Unsupported data format for pixels.')
 
     print("Shape of inputs before _build_network_inputs:", inputs.shape)
-    print("Shape of inputs before _build_network_inputs:", inputs.shape)
+    print("First elements of inputs before _build_network_inputs:", inputs[0,:3,:3,:3])
     
     inputs, inputs_without_pos = self._build_network_inputs(
         inputs, pos, network_input_is_1d)
