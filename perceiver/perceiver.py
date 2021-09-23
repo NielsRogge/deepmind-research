@@ -623,8 +623,19 @@ class BasicDecoder(AbstractPerceiverDecoder):
         use_query_residual=self._use_query_residual)
     final_layer = hk.Linear(
         self._output_num_channels, w_init=self._output_w_init, name='output')
+    
+    print("Shape of query before decoder cross attention:", query.shape)
+    print("First elements of query before decoder cross attention:", query[0,:3,:3])
+
+    print("Shape of z before decoder cross attention:", z.shape)
+    print("First elements of z before decoder cross attention:", z[0,:3,:3])
+    
     output = decoding_cross_attn(query, z, is_training=is_training,
                                  attention_mask=attention_mask)
+    
+    print("Shape of output after decoder cross attention:", output.shape)
+    print("First elements of output after decoder cross attention:", output[0,:3,:3])
+    
     if self._final_project:
       output = final_layer(output)
     return output
