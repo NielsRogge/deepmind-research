@@ -372,6 +372,9 @@ class Perceiver(hk.Module):
         inputs, modality_sizes, inputs_without_pos,
         subsampled_points=subsampled_output_points)
 
+    print("Shape of inputs before going into perceiver:", inputs.shape)
+    print("First elements of inputs:", inputs[0,:3,:3])
+    
     # Run the network forward:
     z = self._encoder(inputs, encoder_query,
                       is_training=is_training, input_mask=input_mask)

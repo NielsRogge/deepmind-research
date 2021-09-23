@@ -432,6 +432,9 @@ class ImagePreprocessor(hk.Module):
       else:
         raise ValueError('Unsupported data format for pixels.')
 
+    print("Shape of inputs before _build_network_inputs:", inputs.shape)
+    print("Shape of inputs before _build_network_inputs:", inputs.shape)
+    
     inputs, inputs_without_pos = self._build_network_inputs(
         inputs, pos, network_input_is_1d)
     modality_sizes = None  # Size for each modality, only needed for multimodal
