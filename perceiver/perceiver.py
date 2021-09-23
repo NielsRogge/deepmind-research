@@ -814,8 +814,18 @@ class FlowDecoder(AbstractPerceiverDecoder):
 
   def __call__(self, query, z, *, is_training, query_mask=None):
     # Output flow and rescale.
+    
+    print("Shape of query in decoder:", query.shape)
+    print("First elements of query in decoder:", query[0,:3,:3])
+
+    print("Shape of z in decoder:", z.shape)
+    print("First elements of z in decoder:", z[0,:3,:3])
+    
     preds = self.decoder(query, z, is_training=is_training)
+    
     preds /= self._rescale_factor
 
+    print("Shape of preds:", preds.shape)
+    
     return preds.reshape([preds.shape[0]] + list(self._output_image_shape) +
                          [preds.shape[-1]])
