@@ -730,6 +730,10 @@ class MultimodalDecoder(AbstractPerceiverDecoder):
 
   def __call__(self, query, z, *, is_training, query_mask=None):
     # B x 1 x num_classes -> B x num_classes
+    
+    print("Shape of decoder query:", query.shape)
+    print("Shape of z:", z.shape)
+    
     return self._decoder(query, z, is_training=is_training)
 
 
