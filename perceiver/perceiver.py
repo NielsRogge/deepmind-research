@@ -571,6 +571,7 @@ class BasicDecoder(AbstractPerceiverDecoder):
                     inputs_without_pos=None, subsampled_points=None):
     assert self._position_encoding_type != 'none'  # Queries come from elsewhere
     if subsampled_points is not None:
+      print("Subsampled points:", subsampled_points)
       # unravel_index returns a tuple (x_idx, y_idx, ...)
       # stack to get the [n, d] tensor of coordinates
       pos = jnp.stack(
