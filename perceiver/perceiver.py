@@ -701,6 +701,9 @@ class MultimodalDecoder(AbstractPerceiverDecoder):
           subsampled_points=subsampled_points.get(modality, None)
       )
 
+    for k,v in decoder_queries.items():
+      print(f"Shape of decoder query for modality {k}:", v.shape)
+    
     # Pad all queries with trainable position encodings to make them
     # have the same channels
     num_channels = (max(query.shape[2] for query in decoder_queries.values())
