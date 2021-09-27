@@ -576,9 +576,12 @@ class BasicDecoder(AbstractPerceiverDecoder):
     if subsampled_points is not None:
       # unravel_index returns a tuple (x_idx, y_idx, ...)
       # stack to get the [n, d] tensor of coordinates
+      test = jnp.unravel_index(subsampled_points, self._output_index_dim)
+      print("Unravel index result:", test)
       pos = jnp.stack(
           jnp.unravel_index(subsampled_points, self._output_index_dim),
           axis=1)
+      print("Shape of pos:", pos.shape)
       # Map these coordinates to [-1, 1]
       pos = -1 + 2 * pos / jnp.array(self._output_index_dim)[None, :]
       pos = jnp.broadcast_to(pos[None],
