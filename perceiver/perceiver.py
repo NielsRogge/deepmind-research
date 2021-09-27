@@ -573,6 +573,7 @@ class BasicDecoder(AbstractPerceiverDecoder):
     
     print("Shape of inputs:", inputs.shape)
     print("Subsampled points:", subsampled_points)
+    print("Output index dims:", self._output_index_dim)
     if subsampled_points is not None:
       # unravel_index returns a tuple (x_idx, y_idx, ...)
       # stack to get the [n, d] tensor of coordinates
