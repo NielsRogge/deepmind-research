@@ -570,8 +570,10 @@ class BasicDecoder(AbstractPerceiverDecoder):
   def decoder_query(self, inputs, modality_sizes=None,
                     inputs_without_pos=None, subsampled_points=None):
     assert self._position_encoding_type != 'none'  # Queries come from elsewhere
+    
+    print("Shape of inputs:", inputs.shape)
+    print("Subsampled points:", subsampled_points)
     if subsampled_points is not None:
-      print("Subsampled points:", subsampled_points)
       # unravel_index returns a tuple (x_idx, y_idx, ...)
       # stack to get the [n, d] tensor of coordinates
       pos = jnp.stack(
@@ -593,6 +595,8 @@ class BasicDecoder(AbstractPerceiverDecoder):
                          ' concat_preprocessed_input is True')
       pos_emb = jnp.concatenate([inputs_without_pos, pos_emb], axis=-1)
 
+    print("Shape of decoder queries:", pos_emb.shape)
+    
     return pos_emb
 
   def __call__(self, query, z, *, is_training,
