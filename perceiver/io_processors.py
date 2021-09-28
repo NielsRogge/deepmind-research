@@ -761,14 +761,18 @@ class MultimodalPostprocessor(hk.Module):
       modality_sizes: Optional[ModalitySizeT] = None) -> Mapping[str,
                                                                  jnp.ndarray]:
     
-    print("Shape of outputs before post processing:")
-    for k,v in inputs.items():
-      print(k, v.shape)
+    print("Shape of inputs before restructure:")
+    print(inputs.shape)
     
     if not self._input_is_dict:
       # Slice up modalities by their sizes.
       assert modality_sizes is not None
       inputs = restructure(modality_sizes=modality_sizes, inputs=inputs)
+
+      print("Shape of inputs after restructure:")
+      for k,v in inputs.items():
+        print(k, v.shape)
+
     outputs = {modality: postprocessor(
         inputs[modality], is_training=is_training, pos=pos, modality_sizes=None)
                for modality, postprocessor in self._modalities.items()}
