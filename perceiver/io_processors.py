@@ -696,6 +696,10 @@ class MultimodalPreprocessor(hk.Module):
           inputs[modality], is_training=is_training, pos=pos,
           network_input_is_1d=network_input_is_1d)
 
+    for k,v in outputs.items():
+      print("Modality:", k)
+      print("Shape of modality after preprocessing:", v.shape)
+    
     common_channel_size = (max(o.shape[2] for o in outputs.values())
                            + self._min_padding_size)
 
