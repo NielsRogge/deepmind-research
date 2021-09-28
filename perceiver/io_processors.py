@@ -767,6 +767,7 @@ class MultimodalPostprocessor(hk.Module):
     if not self._input_is_dict:
       # Slice up modalities by their sizes.
       assert modality_sizes is not None
+      print("Modality sizes:", modality_sizes)
       inputs = restructure(modality_sizes=modality_sizes, inputs=inputs)
 
       print("Shape of inputs after restructure:")
