@@ -760,6 +760,11 @@ class MultimodalPostprocessor(hk.Module):
       pos: Optional[jnp.ndarray] = None,
       modality_sizes: Optional[ModalitySizeT] = None) -> Mapping[str,
                                                                  jnp.ndarray]:
+    
+    print("Shape of outputs before post processing:")
+    for k,v in inputs.items():
+      print(k, v.shape)
+    
     if not self._input_is_dict:
       # Slice up modalities by their sizes.
       assert modality_sizes is not None
@@ -767,6 +772,11 @@ class MultimodalPostprocessor(hk.Module):
     outputs = {modality: postprocessor(
         inputs[modality], is_training=is_training, pos=pos, modality_sizes=None)
                for modality, postprocessor in self._modalities.items()}
+    
+    print("Shape of outputs after post processing:")
+    for k,v in outputs.items():
+      print(k, v.shape)
+    
     return outputs
 
 
