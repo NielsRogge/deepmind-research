@@ -619,6 +619,7 @@ class AudioPostprocessor(hk.Module):
                pos: Optional[jnp.ndarray] = None,
                modality_sizes: Optional[ModalitySizeT] = None) -> jnp.ndarray:
     print("First elements of inputs before audio postprocessor:", inputs[0,:3,:3])
+    print("Sum of inputs:", inputs.sum())
     out = hk.Linear(self._samples_per_patch)(inputs)
     print("Shape of logits after postprocessing:", out.shape)
     print("First elements of inputs after audio postprocessor:", out[0,:3,:3])
