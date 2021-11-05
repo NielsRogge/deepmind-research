@@ -375,6 +375,10 @@ class Perceiver(hk.Module):
     # Run the network forward:
     z = self._encoder(inputs, encoder_query,
                       is_training=is_training, input_mask=input_mask)
+    
+    print("Shape of encoder outputs:", z.shape)
+    print("Encoder outputs:", z[0, :3, :3])
+    
     _, output_modality_sizes = self._decoder.output_shape(
         inputs)
     output_modality_sizes = output_modality_sizes or modality_sizes
@@ -690,16 +694,21 @@ class MultimodalDecoder(AbstractPerceiverDecoder):
     subsampled_points = subsampled_points or dict()
     decoder_queries = dict()
     for modality, decoder in self._modalities.items():
+      print("Creating query for modality:", modality)
       # Get input_without_pos for this modality if it exists.
       input_without_pos = None
       if inputs_without_pos is not None:
         input_without_pos = inputs_without_pos.get(modality, None)
-      decoder_queries[modality] = decoder.decoder_query(
+      
+      query = decoder.decoder_query(
           inputs=inputs[modality],
           modality_sizes=None,
           inputs_without_pos=input_without_pos,
           subsampled_points=subsampled_points.get(modality, None)
       )
+      print("Shape of query:", query.shape)
+      print("First elements of query:", query[0,:3,:3])
+      decoder_queries[modality] = query
 
     # Pad all queries with trainable position encodings to make them
     # have the same channels
